@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from csvimporter.views import import_csv
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("import/", import_csv, name="import_csv"),
 ]

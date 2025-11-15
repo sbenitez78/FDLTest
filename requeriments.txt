@@ -2,3 +2,4 @@ Django>=5.2.8
 pytest-django
 psycopg2
 python-decouple
+pandas
