@@ -3,3 +3,4 @@ pytest-django
 psycopg2
 python-decouple
 pandas
+django-allauth

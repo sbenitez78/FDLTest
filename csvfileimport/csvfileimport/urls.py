@@ -15,10 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-from csvimporter.views import import_csv
+from csvimporter.views import account_logout, import_csv
 
 urlpatterns = [
+    path("accounts/", include("allauth.urls")),
+    path("accounts/logout/", account_logout, name="account_logout"),
     path("import/", import_csv, name="import_csv"),
 ]

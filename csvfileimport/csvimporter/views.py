@@ -1,8 +1,10 @@
 import pandas as pd
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UploadCSVFile
 from .models import CSVImporter
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 MODEL_FIELDS = [
     'csv_id',
@@ -16,6 +18,7 @@ MODEL_FIELDS = [
     'votes'
 ]
 
+@login_required
 def import_csv(request):
     results = {"total": 0, "success": 0, "failed": 0, "errors": []}
 
@@ -81,3 +84,7 @@ def import_csv(request):
         form = UploadCSVFile()
 
     return render(request, "import_form.html", {"form": form})
+
+def account_logout(request):
+    logout(request)
+    return redirect('/import')
