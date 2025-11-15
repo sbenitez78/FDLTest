@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from decouple import config
 
@@ -89,14 +90,15 @@ WSGI_APPLICATION = 'csvfileimport.wsgi.application'
 #    }
 #}
 
+# Database (compatible dev + Docker)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("DB_NAME"),
-        'USER': config("DB_USER"),
-        'PASSWORD': config("DB_PASSWORD"),
-        'HOST': config("DB_HOST", "localhost"),
-        'PORT': config("DB_PORT", "5432"),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DATABASE_NAME", config("DB_NAME")),
+        "USER": os.getenv("DATABASE_USER", config("DB_USER")),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD", config("DB_PASSWORD")),
+        "HOST": os.getenv("DATABASE_HOST", config("DB_HOST", "localhost")),
+        "PORT": os.getenv("DATABASE_PORT", config("DB_PORT", "5432")),
     }
 }
 
@@ -145,13 +147,10 @@ LOGOUT_REDIRECT_URL = "/import"
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "SCOPE": [
-            "email",
-            "profile",
-        ],
+        "SCOPE": ["email", "profile"],
         "APP": {
-            "client_id": config("GOOGLE_CLIENT_ID"),
-            "secret": config("GOOGLE_SECRET_ID"),
+            "client_id": os.getenv("GOOGLE_CLIENT_ID", config("GOOGLE_CLIENT_ID")),
+            "secret": os.getenv("GOOGLE_SECRET_ID", config("GOOGLE_SECRET_ID")),
             "key": ""
         }
     }
