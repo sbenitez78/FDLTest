@@ -49,3 +49,5 @@ LEVEL 3
 - Completion of unit tests and update of the README.
 
 - To execute test you can use `python manage.py` test command 
+
+Video too large to upload so here is a drive URL to see it: https://drive.google.com/file/d/1PKxxMUaQbjZ_tuV0K-SAMOtf7uS3zTCc/view?usp=sharing
