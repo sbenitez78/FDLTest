@@ -1,10 +1,12 @@
 import pandas as pd
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import UploadCSVFile
-from .models import CSVImporter
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.core.files.base import ContentFile
+
+from .forms import UploadCSVFile
+from .models import CSVImporter
+from .utils import upload_image_to_s3
 
 MODEL_FIELDS = [
     'csv_id',
@@ -26,11 +28,24 @@ def import_csv(request):
         form = UploadCSVFile(request.POST, request.FILES)
         if form.is_valid():
             csv_file = request.FILES['file']
+            image_file = request.FILES.get("image")  # optional image in form
 
             if not csv_file.name.endswith('.csv'):
                 results["errors"].append("uploaded file is not an CSV")
                 results["failed"] += 1
                 return render(request, "import_results.html", {"results": results})
+
+            # manual image upload (form)
+            s3_manual_url = None
+            if image_file:
+                try:
+                    s3_manual_url = upload_image_to_s3(
+                        image_file.name,
+                        ContentFile(image_file.read()),  # Convertimos a archivo en memoria
+                        from_url=False
+                    )
+                except Exception as e:
+                    results["errors"].append(f"Manual image upload failed: {e}")
 
             try:
                 df = pd.read_csv(csv_file)
@@ -43,6 +58,16 @@ def import_csv(request):
                     try:
                         rating = None
                         votes = None
+                        image_url = s3_manual_url  # manual upload by default
+
+                        # image upload from CSV url
+                        if 'Image URL' in row and row['Image URL']:
+                            try:
+                                file_name = f"{row.get('ID') or 'row'}_{row.get('Name','')}.jpg"
+                                image_url = upload_image_to_s3(file_name, row['Image URL'])
+                            except Exception as e:
+                                results["errors"].append(f"Image upload failed for row {i}: {e}")
+
                         if 'Ratings' in row and pd.notna(row['Ratings']):
                             try:
                                 rating = float(row['Ratings'])
@@ -64,7 +89,8 @@ def import_csv(request):
                             genre=row.get("Genre", ""),
                             rating=rating,
                             actors=row.get("Actor/Actress", ""),
-                            votes=votes
+                            votes=votes,
+                            image_url=image_url,
                         )
 
                         results["success"] += 1
@@ -76,7 +102,7 @@ def import_csv(request):
                 return render(request, "import_results.html", {"results": results})
 
             except Exception as e:
-                results["errors"].append(f"Error processig CSV: {e}")
+                results["errors"].append(f"Error processing CSV: {e}")
                 results["failed"] += 1
                 return render(request, "import_results.html", {"results": results})
 

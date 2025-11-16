@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -166,3 +167,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", config("AWS_ACCESS_KEY_ID"))
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", config("AWS_SECRET_ACCESS_KEY"))
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", config("AWS_STORAGE_BUCKET_NAME"))
+AWS_S3_REGION_NAME = os.getenv("AWS_REGION", "us-east-1")
+AWS_QUERYSTRING_AUTH = False  # optional, to make URLs public

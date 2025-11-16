@@ -7,7 +7,7 @@ LEVEL 1
 - I used the Kaggle platform to download two sample dataset for import. One about movies called Thriller, Crime, Action and another about books called Goodreads-books.
 - I decided to use pandas for data formatting because I find it easy to handle missing values, dynamic columns, filtering, and data cleaning compared to the classic csv.reader import method that reads each row as a list instead of a dictionary, and I need to know the column order and access it by index, making it less readable... indexes have to be managed manually. 
 
-Please, for this to work, use **AllThrillerSeriesList.csv**, as that's how the model is set up. To generate an error and see the message, use **books.csv**.
+Please, for this to work, use [[**AllThrillerSeriesList.csv**](www.kaggle.com/datasets/jealousleopard/goodreadsbooks?resource=download)], as that's how the model is set up. To generate an error and see the message, use [[**books.csv**](https://www.kaggle.com/datasets/jealousleopard/goodreadsbooks?resource=download)].
 
 LEVEL 2
 - I used the django-allauth library because it has a wide variety of login systems. I used Google as the provider to have the opportunity to implement some GCP.
@@ -22,8 +22,13 @@ IMPORTANT: The URI is configured as http://127.0.0.1:8000/accounts/google/login/
 
 - I implemented unit tests to test how the form, model, and views are working so far.
 
-
 - A video will be uploaded demonstrating the functionality up to this point.
+
+LEVEL 3
+
+- A major area for improvement is adding more robust validation for image uploads. Currently, I find the validation process weak and prone to errors.
+
+- Another area for improvement is that when an image is uploaded, the URL is saved for all records.
 
 --- 
 

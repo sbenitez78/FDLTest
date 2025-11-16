@@ -12,6 +12,7 @@ class CSVImporter(models.Model):
     actors = models.TextField(blank=True)
     votes = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    image_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.name
