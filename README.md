@@ -47,3 +47,5 @@ LEVEL 3
 - Implementation of OAuth with Google. It was necessary to migrate models again for user insertion during registration. Registration is now possible.
 
 - Completion of unit tests and update of the README.
+
+- To execute test you can use `python manage.py` test command 
